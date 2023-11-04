@@ -28,6 +28,7 @@ async function login() {
 
         router.push("/home");
 
+
     } catch (error) {
         var myToast = new bootstrap.Toast(document.getElementById('myToast'), {
             autohide: true,

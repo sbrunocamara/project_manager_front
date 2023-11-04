@@ -24,10 +24,10 @@ export const useAuth = defineStore('auth',{
 
     },
 
-    async getToken(){
-        return localStorage.getItem('token');
+    getToken(){
+       return localStorage.getItem('token');
     },
-    async getUser(){
+   getUser(){
         return localStorage.getItem('user');
     },
 
@@ -38,3 +38,4 @@ export const useAuth = defineStore('auth',{
    
 }})
 
+export default useAuth
