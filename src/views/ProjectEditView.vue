@@ -89,7 +89,7 @@ import NavBar from '@/components/NavBar.vue'
         <div class="card">
             <div class="card-header">
                 <h4>
-                   Editar usuário
+                   Editar projeto
                 </h4>
             </div>
             <form  @submit.prevent="updateProject">
