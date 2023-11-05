@@ -30,8 +30,9 @@ export default {
       requisitos: [],
       requisto_delete: null,
       requisito_update: null,
-      file_url :'',
-      file_base64:'',
+      file_url: '',
+      file_base64: '',
+      file_name: ''
     }
   },
 
@@ -244,7 +245,7 @@ export default {
     },
     // Download
     async getRelatorio(id) {
-      
+
       try {
 
         const response = await http.get('/relatorio/pdf/' + id, {
@@ -258,40 +259,33 @@ export default {
           res => {
             this.file_url = res.data.URL
             this.file_base64 = res.data.base64
+            this.file_name = res.data.filename
 
-          },       
+          },
         )
 
-        
-
-        axios({
-    url: 'http://'+this.file_url,
-    method: 'GET',
-    responseType: 'blob',
-    headers: { 
-  'Access-Control-Allow-Origin' : '*',
-  'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-},
-}).then((response) => {
-
-     var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-     var fileLink = document.createElement('a');
-  
-     fileLink.href = fileURL;
-     fileLink.setAttribute('download', 'file.pdf');
-     document.body.appendChild(fileLink);
-   
-     
-
-     fileLink.click();
-});
-
+        this.downloadFile('http://' + this.file_url, this.file_name)
 
       } catch (error) {
         console.log(error)
 
       }
 
+    },
+    async downloadFile(url, fileName) {
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.style.display = 'none';
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+          window.URL.revokeObjectURL(url);
+        })
+        .catch((error) => console.log(error));
     },
 
   },
@@ -309,20 +303,20 @@ import NavBar from '@/components/NavBar.vue'
     <NavBar />
   </main>
   <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <h4>
+    <div class="card" style="width:100%">
+      <div style="width:100%" class="card-header">
+        <h4 >
           Projetos
           <RouterLink to="/projeto/new" class="btn btn-primary float-end">Novo Projeto</RouterLink>
         </h4>
       </div>
-      <div class="card-body">
-        <table class="table table-bordered">
+      <div class="card-body d-flex justify-content-center">
+        <table style="width:90% " class="table table-bordered">
           <thead>
             <tr>
-              <th>Descrição</th>
-              <th>Data</th>
-              <th>Usuário</th>
+              <th style="width:30%">Descrição</th>
+              <th  style="width:10%">Data</th>
+              <th  style="width:15%">Usuário</th>
               <th class="actions">Actions</th>
             </tr>
           </thead>
@@ -342,7 +336,7 @@ import NavBar from '@/components/NavBar.vue'
                   Expandir
                 </button>
                 <button type="button" class="btn btn-download fa fa-download" @click="getRelatorio(projeto.id)">
-                 Relatório
+                  Relatório
                 </button>
               </td>
             </tr>
@@ -549,6 +543,7 @@ import NavBar from '@/components/NavBar.vue'
 .actions {
   display: flex;
   justify-content: center;
+
 }
 
 
