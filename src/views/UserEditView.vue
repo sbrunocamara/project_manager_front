@@ -23,16 +23,16 @@ export default {
         this.getUserById(this.$route.params.id)
 
     },
-    methods : {
-        async updateUser(){
+    methods: {
+        async updateUser() {
             try {
-                const response = await http.put('/usuario/update/'+this.$route.params.id, this.model.user, {
+                const response = await http.put('/usuario/update/' + this.$route.params.id, this.model.user, {
                     headers: {
-                        Authorization: `Bearer `+localStorage.getItem("token")
+                        Authorization: `Bearer ` + localStorage.getItem("token")
                     }
                 }
                 ).then(
-                    res=>{
+                    res => {
                         this.$router.push('/user')
 
 
@@ -41,38 +41,38 @@ export default {
                             user: '',
                             password: '',
                             privilegio: ''
-                        
+
                         }
                     }
                 )
             } catch (error) {
 
-        if(error.response.status == 401){
-            var myToast = new bootstrap.Toast(document.getElementById('myToast'), {
-            autohide: true,
-            delay: 3500,
-          });
-          myToast.show();
-        }
-                  
+                if (error.response.status == 401) {
+                    var myToast = new bootstrap.Toast(document.getElementById('myToast'), {
+                        autohide: true,
+                        delay: 3500,
+                    });
+                    myToast.show();
+                }
+
             }
         },
 
-        async getUserById(id){
+        async getUserById(id) {
             try {
-                const response = await http.get('/usuario/get/'+id,{
+                const response = await http.get('/usuario/get/' + id, {
                     headers: {
-                        Authorization: `Bearer `+localStorage.getItem("token")
+                        Authorization: `Bearer ` + localStorage.getItem("token")
                     }
                 }
                 ).then(
-                    res=>{
+                    res => {
                         this.model.user = res.data.data[0]
                     }
                 )
             } catch (error) {
                 console.log(error)
-                
+
             }
 
 
@@ -92,52 +92,53 @@ import NavBar from '@/components/NavBar.vue'
         <div class="card">
             <div class="card-header">
                 <h4>
-                   Editar usuário
+                    Editar usuário
                 </h4>
             </div>
-            <form  @submit.prevent="updateUser">
-            <div class="card-body">
-                <div class="mb-3" >
-                    <label >Nome</label>
-                    <input type="text" class="form-control" v-model="model.user.name" required>
-                </div>
-                <div class="mb-3">
-                    <label >Usuário</label>
-                    <input type="text" class="form-control" v-model="model.user.user" required>
-                </div>
-                <!-- <div class="mb-3">
+            <form @submit.prevent="updateUser">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>Nome</label>
+                        <input type="text" class="form-control" v-model="model.user.name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Usuário</label>
+                        <input type="text" class="form-control" v-model="model.user.user" required>
+                    </div>
+                    <!-- <div class="mb-3">
                     <label >Senha</label>
                     <input type="password" class="form-control" v-model="model.user.password" required>
                 </div> -->
-                <div class="mb-3">
-                    <label  class="form-group col-md-1" >Privilégio </label>
-                    <select id="privilegio" name="privilegio"  class="form-control" v-model="model.user.privilegio" required >
-                        
-                        <option value="1">Administrador</option>
-                        <option value="2">Padrão</option>
-                    </select>
+                    <div class="mb-3">
+                        <label class="form-group col-md-1">Privilégio </label>
+                        <select id="privilegio" name="privilegio" class="form-control" v-model="model.user.privilegio"
+                            required>
+
+                            <option value="1">Administrador</option>
+                            <option value="2">Padrão</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="submit btn btn-primary">Salvar</button>
+                    </div>
+
                 </div>
-                <div class="mb-3">
-                    <button type="submit" class="submit btn btn-primary" >Salvar</button>
-                </div>
-                
-            </div>
-        </form>
+            </form>
         </div>
 
     </div>
-      <!-- Toast -->
-      <div>
-    <div class="toast" id="myToast">
-      <div class="toast-header">
-        <strong class="me-auto"><i class="bi-gift-fill"></i> Falha</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-      </div>
-      <div class="toast-body">
-        Você não tem permissão para executar essa operação! <a href="#"></a>
-      </div>
+    <!-- Toast -->
+    <div>
+        <div class="toast" id="myToast">
+            <div class="toast-header">
+                <strong class="me-auto"><i class="bi-gift-fill"></i> Falha</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Você não tem permissão para executar essa operação! <a href="#"></a>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
@@ -147,10 +148,9 @@ import NavBar from '@/components/NavBar.vue'
     right: 0;
     margin: 1em;
     background-color: rgb(233, 102, 102);
-  }
-  
-  .toast-header {
-    background-color: rgb(226, 56, 56);
-  }
+}
 
+.toast-header {
+    background-color: rgb(226, 56, 56);
+}
 </style>
