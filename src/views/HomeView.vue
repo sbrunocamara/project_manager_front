@@ -18,6 +18,12 @@ export default {
           codigo: '',
           projeto: '',
           usuario: ''
+        },
+        NewRequisito: {
+          descricao: '',
+          codigo: '',
+          projeto: '',
+          usuario: ''
         }
       },
       projetos: [],
@@ -25,6 +31,7 @@ export default {
       modal_requisitos: null,
       modal_confirm_requisito: null,
       modalRequisitosUpdate: null,
+      modalRequisitosAdd: null,
       project_id: null,
       visible: true,
       requisitos: [],
@@ -113,6 +120,7 @@ export default {
 
           res => {
             this.requisitos = res.data.data
+            this.project_id = id
           }
 
 
@@ -122,6 +130,10 @@ export default {
         }
         if (this.modalRequisitosUpdate != null) {
           this.modalRequisitosUpdate.hide()
+        }
+        
+        if (this.modalRequisitosAdd != null) {
+          this.modalRequisitosAdd.hide()
         }
 
         this.modal_requisitos = new bootstrap.Modal(document.getElementById('modalRequisitos'), focus)
@@ -287,10 +299,61 @@ export default {
         })
         .catch((error) => console.log(error));
     },
+    async showModalRequisitoAdd(id) {
 
-  },
+      if (this.modal_requisitos != null) {
+          this.modal_requisitos.hide()
+        }
+
+   
+
+        if (this.modalRequisitosUpdate != null) {
+  
+          this.modalRequisitosUpdate.hide()
+        }
+
+      this.modalRequisitosAdd = new bootstrap.Modal(document.getElementById('modalRequisitosAdd'), focus)
+      this.modalRequisitosAdd.show()
+
+    },
+
+    async NewRequisito(){
+
+      this.model.NewRequisito.usuario = localStorage.getItem("user")
+      this.model.NewRequisito.projeto = this.project_id
+
+      try {
+        const response = await http.post('/requisito/add', this.model.NewRequisito, {
+          headers: {
+            Authorization: `Bearer ` + localStorage.getItem("token")
+          }
+        }
+        ).then(
+          res => {
+            this.getRequisitos(this.project_id)
+    },
+    this.model.NewRequisito = {
+      descricao: '',
+      codigo: '',
+      projeto: '',
+      usuario: ''
+    },
+    )
+
+  }catch (error) {
+  
+        if (error.response.status == 401) {
+          var myToast = new bootstrap.Toast(document.getElementById('noAuth'), {
+            autohide: true,
+            delay: 3500,
+          });
+          myToast.show();
+        }
+      }
 
 
+},
+},
 }
 
 </script>
@@ -441,6 +504,9 @@ import NavBar from '@/components/NavBar.vue'
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Requisitos</h5>
+          <button type="button" @click="showModalRequisitoAdd(this.project_id)" class="btn btn-primary new_requisito float-end">
+                  Novo Requisito
+                </button>
           <button type="button" class="close" data-dismiss="modal" @click="this.modal_requisitos.hide()"
             aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -481,6 +547,51 @@ import NavBar from '@/components/NavBar.vue'
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="this.modal_requisitos.hide()"
+            data-dismiss="modal">Voltar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+     <!-- Modal NEW REQUISITO-->
+     <div class="modal fade modalRequisitos modal-dialog modal-lg" id="modalRequisitosAdd" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Requisitos</h5>
+          <button type="button" class="close" data-dismiss="modal" @click="this.getRequisitos(this.project_id)"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="container mt-5">
+          <div class="card">
+            <div class="card-header">
+              <h4>
+                Novo requisito
+              </h4>
+            </div>
+            <form @submit.prevent="NewRequisito">
+              <div class="card-body">
+                <div class="mb-3">
+                  <label>Descrição</label>
+                  <input type="text" class="form-control" v-model="model.NewRequisito.descricao" required>
+                </div>
+                <div class="mb-3">
+                  <label>Código</label>
+                  <input type="text" class="form-control" v-model="model.NewRequisito.codigo" required>
+                </div>
+
+                <div class="mb-3">
+                  <button type="submit" class="submit btn btn-primary">Salvar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="this.getRequisitos(this.project_id)"
             data-dismiss="modal">Voltar</button>
         </div>
       </div>
@@ -532,6 +643,7 @@ import NavBar from '@/components/NavBar.vue'
     </div>
   </div>
   <!-- Modal -->
+ 
 </template>
 <style scoped>
 .button_edit {
@@ -589,6 +701,22 @@ import NavBar from '@/components/NavBar.vue'
   font-size: 18px; */
 }
 
+.new_requisito{
+  
+  justify-content: center; /* alinha os itens na horizontal */
+  border-radius: 5px;
+padding: 0.3em;
+/* color: var(--branco-principal); */
+/* display: block; */
+/* text-decoration: none; */
+margin-bottom: 0em;
+margin-top: 0em;
+margin-left: 30em;
+width: 125px;
+
+
+
+}
 .btn-download:hover {
   background-color: rgb(187, 255, 0);
 }
