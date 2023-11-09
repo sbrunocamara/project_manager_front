@@ -1,3 +1,9 @@
+Projeto desenvolvido para tarefa de PROJETO INTEGRADOR: PROGRAMAÇÃO PARA INTERNET.
+
+Front-end
+
+API -> https://github.com/sbrunocamara/project_manager_api
+
 # vue-project
 
 This template should help get you started developing with Vue 3 in Vite.
