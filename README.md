@@ -1,6 +1,9 @@
 Projeto desenvolvido para tarefa de PROJETO INTEGRADOR: PROGRAMAÇÃO PARA INTERNET.
 
-Front-end
+#Front-end
+
+ - VueJS
+ - Javascript
 
 API -> https://github.com/sbrunocamara/project_manager_api
 
